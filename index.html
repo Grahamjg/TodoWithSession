@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel='stylesheet' href='/css/layout.css' type="text/css" >
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+</head>
+
+<body>
+
+    <div id = "todo" >
+        <h1>Todo List</h1>
+<div class="todotable">
+        <table width = 700px id="idTable" class="idTable">
+            <thead>
+                <tr id=hdr>
+                    <th width = 480px>Description</td>
+                    <th width = 110px>Completion Date</td>
+                    <th width = 60px>Status</td>
+                    <th width = 40px>delete</td>
+                        <th width = 40px>edit</td>
+            </tr>
+            </thead> 
+        </table>
+    </div>
+
+        <div class= "todo-input"  > 
+            <div class="todo-add">
+            <form action="/todo/add/" method="post">
+                <p>
+                    <label id="tdlabel" for="newtodo">Todo Item:  </label>
+                    <input type="text" name="newtodo" id="newtodo" autofocus />
+                    <input type="date" name="completiondate" id="completiondate" autofocus />
+                    <input type="submit" name="addoredit" id ="addoredit" value="  Add   " />
+                </p>
+            </form>
+        </div>
+        </div>
+    </div>
+    <div class= "talktoserver">
+        <h1>Talking through socket</h1>
+        <input type="text" name="newmsg" id="newmsg" autofocus />
+        <p><input type="button" value="Poke the server" id="poke" /></p>
+
+
+    </div>
+
+    <div class="popup-slider"></div>
+</div>
+
+<!-- put the javascript at the end as it gives the appearance of the page loading faster - apparently-->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+
+    var socket = io.connect('http://localhost:3000');
+    var username = prompt('what\'s your username');
+    socket.emit('newUser', username);
+    socket.on('connect', function (data) {
+        socket.emit('joined', document);
+    })
+    socket.on('message',function(message) {
+        alert('The server has a message for you: ' + message);
+    })
+    socket.on('edit', function(data) {
+        alert(data);
+    })
+
+    $('#poke').click(function () {
+        alert("data");
+                socket.emit('message', 'Hi server, how are you?');
+            })
+
+</script>
+</body>
+</html> 
